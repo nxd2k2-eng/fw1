@@ -1,0 +1,292 @@
+<!-- Success -->
+@if (success) {
+  <div class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
+    <div class="text-center p-5 bg-white shadow-sm" style="max-width: 440px; width: 100%">
+      <i class="bi bi-check-circle-fill text-success mb-3" style="font-size: 56px"></i>
+      <h2 class="fw-bold mb-2">Tạo Đơn Thành Công!</h2>
+      <p class="text-muted mb-1">
+        Mã đơn: <strong>{{ resultOrder?.order_code }}</strong>
+      </p>
+      <p class="text-muted mb-4">
+        Tổng tiền:
+        <strong class="text-dark">{{ resultOrder?.final_amount | number: '1.0-0' }}₫</strong>
+      </p>
+      <div class="d-flex gap-3 justify-content-center">
+        <button class="btn btn-outline-dark rounded-0 px-4" (click)="reset()">Tạo đơn mới</button>
+        <button class="btn btn-dark rounded-0 px-4" (click)="goToList()">Về sản phẩm</button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (!success) {
+  <!-- Header -->
+  <div class="bg-white border-bottom px-4 py-3 d-flex align-items-center gap-3">
+    <button class="btn btn-outline-dark btn-sm rounded-0" (click)="goToList()">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <h1 class="h5 fw-bold mb-0">Tạo Đơn Hàng Mới</h1>
+  </div>
+
+  <div class="container-fluid px-4 py-4">
+    <div class="row g-4">
+      <!-- LEFT: Chọn sản phẩm -->
+      <div class="col-lg-5">
+        <div class="bg-white border h-100">
+          <div class="p-3 border-bottom">
+            <h2 class="h6 fw-bold mb-3">Chọn Sản Phẩm</h2>
+            <div class="input-group rounded-0">
+              <input
+                type="text"
+                class="form-control rounded-0"
+                [(ngModel)]="searchText"
+                (keyup.enter)="onSearch()"
+                placeholder="Tìm sản phẩm..."
+              />
+              <button class="btn btn-dark rounded-0" (click)="onSearch()">
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="picker-list">
+            @if (loading) {
+              <div class="text-center py-4 text-muted small">
+                <div class="spinner-border spinner-border-sm me-2"></div>
+                Đang tải...
+              </div>
+            }
+            @for (p of products; track p.id) {
+              <div class="d-flex gap-3 p-3 border-bottom picker-item">
+                <img
+                  [src]="p.thumbnail_url || 'https://placehold.co/60x60?text=G'"
+                  [alt]="p.name"
+                  class="picker-img"
+                  (error)="$any($event.target).src = 'https://placehold.co/60x60?text=G'"
+                />
+                <div class="flex-grow-1">
+                  <p
+                    class="small text-muted mb-0"
+                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05rem"
+                  >
+                    {{ p.brand }}
+                  </p>
+                  <p class="fw-bold mb-1 small">{{ p.name }}</p>
+                  <p class="text-dark fw-bold mb-2 small">
+                    {{ p.sale_price ?? p.price | number: '1.0-0' }}₫
+                  </p>
+                  <div class="d-flex flex-wrap gap-1">
+                    @for (size of getSizes(p); track size) {
+                      @for (v of getVariantsBySize(p, size); track v.id) {
+                        <button
+                          class="btn btn-outline-dark btn-sm rounded-0 variant-chip"
+                          (click)="addToCart(p, v)"
+                          title="Còn {{ v.stock }}"
+                        >
+                          {{ v.size }}/{{ v.color }}
+                        </button>
+                      }
+                    }
+                    @if (p.total_stock === 0) {
+                      <span class="text-muted small fst-italic">Hết hàng</span>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Đơn hàng -->
+      <div class="col-lg-7">
+        <div class="d-flex flex-column gap-4">
+          <!-- Giỏ hàng -->
+          <div class="bg-white border">
+            <div class="p-3 border-bottom">
+              <h2 class="h6 fw-bold mb-0">
+                Giỏ Hàng
+                @if (cart.length > 0) {
+                  <span class="text-muted fw-normal">({{ cart.length }} sản phẩm)</span>
+                }
+              </h2>
+            </div>
+            @if (cart.length === 0) {
+              <div class="text-center py-4 text-muted">
+                <i class="bi bi-cart3 mb-2" style="font-size: 32px"></i>
+                <p class="small mb-0">Chưa có sản phẩm. Chọn từ danh sách bên trái.</p>
+              </div>
+            }
+            @for (item of cart; track item.variant.id; let i = $index) {
+              <div class="d-flex align-items-center gap-3 p-3 border-bottom">
+                <img
+                  [src]="item.product.thumbnail_url || 'https://placehold.co/48x48?text=G'"
+                  [alt]="item.product.name"
+                  class="cart-img"
+                  (error)="$any($event.target).src = 'https://placehold.co/48x48?text=G'"
+                />
+                <div class="flex-grow-1">
+                  <p class="fw-bold mb-0 small">{{ item.product.name }}</p>
+                  <p class="text-muted mb-0" style="font-size: 11px">
+                    {{ item.variant.size }} / {{ item.variant.color }}
+                  </p>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <button
+                    class="btn btn-outline-dark btn-sm rounded-0 px-2"
+                    (click)="changeQty(item, -1)"
+                  >
+                    −
+                  </button>
+                  <span class="fw-bold" style="min-width: 20px; text-align: center">{{
+                    item.quantity
+                  }}</span>
+                  <button
+                    class="btn btn-outline-dark btn-sm rounded-0 px-2"
+                    (click)="changeQty(item, 1)"
+                    [disabled]="item.quantity >= item.variant.stock"
+                  >
+                    +
+                  </button>
+                </div>
+                <span class="fw-bold small" style="min-width: 90px; text-align: right">
+                  {{ getSubtotal(item) | number: '1.0-0' }}₫
+                </span>
+                <button class="btn btn-link text-danger p-0" (click)="removeFromCart(i)">
+                  <i class="bi bi-x-lg"></i>
+                </button>
+              </div>
+            }
+            @if (cart.length > 0) {
+              <div class="d-flex justify-content-between align-items-center p-3 bg-light">
+                <span class="fw-bold">Tổng cộng</span>
+                <span class="h5 fw-bold mb-0">{{ getTotal() | number: '1.0-0' }}₫</span>
+              </div>
+            }
+          </div>
+
+          <!-- Thông tin khách hàng -->
+          <div class="bg-white border">
+            <div class="p-3 border-bottom">
+              <h2 class="h6 fw-bold mb-0">Thông Tin Khách Hàng</h2>
+            </div>
+            <div class="p-3">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-uppercase letter-spacing">
+                    Họ tên <span class="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control rounded-0"
+                    [(ngModel)]="customer.full_name"
+                    placeholder="Nguyễn Văn A"
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold text-uppercase letter-spacing">
+                    Điện thoại <span class="text-danger">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    class="form-control rounded-0"
+                    [(ngModel)]="customer.phone"
+                    placeholder="0901 234 567"
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold text-uppercase letter-spacing"
+                    >Email</label
+                  >
+                  <input
+                    type="email"
+                    class="form-control rounded-0"
+                    [(ngModel)]="customer.email"
+                    placeholder="email@gmail.com"
+                  />
+                </div>
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-uppercase letter-spacing"
+                    >Địa chỉ</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control rounded-0"
+                    [(ngModel)]="customer.address"
+                    placeholder="123 Đường ABC..."
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Thanh toán & ghi chú -->
+          <div class="bg-white border">
+            <div class="p-3 border-bottom">
+              <h2 class="h6 fw-bold mb-0">Thanh Toán & Ghi Chú</h2>
+            </div>
+            <div class="p-3">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold text-uppercase letter-spacing">
+                    Hình thức thanh toán
+                  </label>
+                  <select class="form-select rounded-0" [(ngModel)]="payment_method">
+                    <option value="cash">Tiền mặt</option>
+                    <option value="bank_transfer">Chuyển khoản ngân hàng</option>
+                    <option value="cod">COD - Thu tiền khi giao</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold text-uppercase letter-spacing">
+                    Mã giảm giá
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control rounded-0"
+                    [(ngModel)]="coupon_code"
+                    placeholder="GIAM10..."
+                    style="text-transform: uppercase"
+                  />
+                </div>
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-uppercase letter-spacing"
+                    >Ghi chú</label
+                  >
+                  <textarea
+                    class="form-control rounded-0"
+                    rows="2"
+                    [(ngModel)]="note"
+                    placeholder="Giao giờ hành chính..."
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Error -->
+          @if (errorMsg) {
+            <div class="alert alert-danger rounded-0 d-flex align-items-center gap-2">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+              {{ errorMsg }}
+            </div>
+          }
+
+          <!-- Submit -->
+          <button
+            class="btn btn-dark rounded-0 py-3 w-100 fw-bold"
+            [disabled]="!isValid || submitting"
+            (click)="submit()"
+          >
+            @if (!submitting) {
+              <i class="bi bi-check-lg me-2"></i>Xác Nhận Tạo Đơn
+            }
+            @if (submitting) {
+              <span class="spinner-border spinner-border-sm me-2"></span>Đang xử lý...
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

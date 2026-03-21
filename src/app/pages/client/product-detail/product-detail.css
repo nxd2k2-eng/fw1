@@ -1,0 +1,14 @@
+.letter-spacing { letter-spacing: 0.08rem; }
+
+.main-img-wrap { overflow: hidden; background: #f8f9fa; }
+.main-img { height: 500px; object-fit: cover; transition: transform 0.4s; }
+.main-img:hover { transform: scale(1.03); }
+
+.thumb-img {
+  width: 72px; height: 72px; object-fit: cover;
+  border: 2px solid transparent; cursor: pointer; transition: border 0.2s;
+}
+.thumb-img.active  { border-color: #212529; }
+.thumb-img:hover   { border-color: #666; }
+
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }

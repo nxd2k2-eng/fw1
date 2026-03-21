@@ -1,0 +1,69 @@
+<nav class="navbar navbar-expand-lg bg-white shadow-sm px-4 py-3">
+  <div class="container">
+
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold text-uppercase letter-spacing" routerLink="/">
+      <span class="d-flex flex-column lh-sm">
+        <span style="letter-spacing: .12rem; font-size: 18px;">RFShop</span>
+        <span class="text-muted" style="font-size: 10px; font-weight: 400;">Premium Footwear</span>
+      </span>
+    </a>
+
+    <!-- Toggler mobile -->
+    <button class="navbar-toggler border-0" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Nav links -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto gap-1">
+        <li class="nav-item">
+          <a class="nav-link px-3" routerLink="/" routerLinkActive="nav-active"
+             [routerLinkActiveOptions]="{exact:true}">Trang Chủ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3" routerLink="/products" routerLinkActive="nav-active">
+            Sản Phẩm
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3" routerLink="/about" routerLinkActive="nav-active">
+            Giới Thiệu
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3" routerLink="/contact" routerLinkActive="nav-active">
+            Liên Hệ
+          </a>
+        </li>
+      </ul>
+
+      <!-- Right side -->
+      <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
+        <span class="d-none d-lg-flex align-items-center gap-2 text-muted small">
+          <i class="bi bi-telephone"></i>
+          <span>0901 234 567</span>
+        </span>
+
+        <!-- Chưa đăng nhập -->
+        <a routerLink="/login" class="btn btn-dark rounded-0 px-4" *ngIf="!user">
+          <i class="bi bi-person me-2"></i>Đăng Nhập
+        </a>
+
+        <!-- Đã đăng nhập -->
+        <ng-container *ngIf="user">
+          <span class="small fw-bold">
+            <i class="bi bi-person-check me-1"></i>{{ user.name }}
+          </span>
+          <button class="btn btn-outline-dark rounded-0 px-3" (click)="logout()">
+            Đăng Xuất
+          </button>
+        </ng-container>
+
+      </div>
+    </div>
+
+  </div>
+</nav>

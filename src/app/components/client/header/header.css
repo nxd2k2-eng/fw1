@@ -1,0 +1,47 @@
+.letter-spacing { letter-spacing: 0.05rem; }
+
+.navbar {
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: #444 !important;
+  transition: color 0.2s;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: #000 !important;
+}
+
+.nav-active {
+  color: #000 !important;
+  font-weight: 700;
+}
+
+.nav-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  background: #212529;
+}
+
+.btn-dark {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05rem;
+  transition: all 0.2s;
+}
+
+.btn-dark:hover {
+  background: #333;
+  transform: translateY(-1px);
+}

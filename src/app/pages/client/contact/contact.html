@@ -1,0 +1,153 @@
+<!-- Hero -->
+<section class="contact-hero py-5 text-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <h1 class="display-5 mb-3">Liên Hệ Với Chúng Tôi</h1>
+        <p class="text-muted lead">
+          Bạn có câu hỏi về sản phẩm hoặc đơn hàng? Chúng tôi luôn sẵn sàng hỗ trợ bạn.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Info + Form -->
+<section class="py-5">
+  <div class="container">
+    <div class="row g-5">
+
+      <!-- Thông tin liên hệ -->
+      <div class="col-lg-4">
+        <h2 class="h4 mb-4">Thông Tin Liên Hệ</h2>
+        <div class="d-flex flex-column gap-4">
+          @for (i of infos; track i.label) {
+            <div class="d-flex align-items-start gap-3">
+              <div class="info-icon-box">
+                <i class="bi {{ i.icon }}"></i>
+              </div>
+              <div>
+                <p class="fw-bold mb-1">{{ i.label }}</p>
+                <p class="text-muted mb-0">{{ i.value }}</p>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Social -->
+        <div class="mt-5">
+          <h3 class="h6 text-uppercase text-muted mb-3">Theo dõi chúng tôi</h3>
+          <div class="d-flex gap-2">
+            <a href="#" class="btn btn-outline-dark btn-sm btn-icon">
+              <i class="bi bi-facebook"></i>
+            </a>
+            <a href="#" class="btn btn-outline-dark btn-sm btn-icon">
+              <i class="bi bi-instagram"></i>
+            </a>
+            <a href="#" class="btn btn-outline-dark btn-sm btn-icon">
+              <i class="bi bi-tiktok"></i>
+            </a>
+            <a href="#" class="btn btn-outline-dark btn-sm btn-icon">
+              <i class="bi bi-youtube"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="col-lg-8">
+
+        <!-- Success -->
+        @if (submitted) {
+          <div class="alert alert-success d-flex align-items-center gap-3">
+            <i class="bi bi-check-circle-fill fs-4"></i>
+            <div>
+              <strong>Gửi thành công!</strong> Chúng tôi sẽ phản hồi trong vòng 24 giờ.
+              <button class="btn btn-sm btn-outline-success ms-3" (click)="reset()">Gửi lại</button>
+            </div>
+          </div>
+        }
+
+        @if (!submitted) {
+          <h2 class="h4 mb-4">Gửi Tin Nhắn</h2>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Họ tên <span class="text-danger">*</span></label>
+              <input type="text" class="form-control rounded-0"
+                     [(ngModel)]="form.name" placeholder="Nguyễn Văn A"/>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Email <span class="text-danger">*</span></label>
+              <input type="email" class="form-control rounded-0"
+                     [(ngModel)]="form.email" placeholder="email@gmail.com"/>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Số điện thoại</label>
+              <input type="tel" class="form-control rounded-0"
+                     [(ngModel)]="form.phone" placeholder="0901 234 567"/>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Chủ đề</label>
+              <select class="form-select rounded-0" [(ngModel)]="form.subject">
+                <option value="">-- Chọn chủ đề --</option>
+                @for (s of subjects; track s) {
+                  <option [value]="s">{{ s }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Tin nhắn <span class="text-danger">*</span></label>
+              <textarea class="form-control rounded-0" rows="5"
+                        [(ngModel)]="form.message"
+                        placeholder="Nhập nội dung bạn muốn gửi..."></textarea>
+            </div>
+            <div class="col-12">
+              <button class="btn btn-dark rounded-0 px-5"
+                      [disabled]="!form.name || !form.email || !form.message || sending"
+                      (click)="send()">
+                @if (!sending) { Gửi Tin Nhắn }
+                @if (sending)  { Đang gửi... }
+              </button>
+            </div>
+          </div>
+        }
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row justify-content-center mb-5">
+      <div class="col-lg-6 text-center">
+        <h2 class="mb-2">Câu Hỏi Thường Gặp</h2>
+        <p class="text-muted">Những thắc mắc phổ biến từ khách hàng</p>
+      </div>
+    </div>
+    <div class="row g-4 justify-content-center">
+      @for (q of faqs; track q.q) {
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm rounded-0 h-100 p-4">
+            <div class="card-body">
+              <h3 class="h6 fw-bold mb-2">
+                <i class="bi bi-question-circle-fill me-2"></i>{{ q.q }}
+              </h3>
+              <p class="text-muted mb-0">{{ q.a }}</p>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Map -->
+<section>
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.841456658478!2d105.76808!3d10.03012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a0882539fcbe55%3A0x50dfb264e6db2a87!2zQ-G6p24gVGjGoQ!5e0!3m2!1svi!2s!4v1234567890"
+    width="100%" height="300" style="border:0; display:block;"
+    allowfullscreen loading="lazy">
+  </iframe>
+</section>

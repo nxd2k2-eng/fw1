@@ -1,0 +1,39 @@
+.letter-spacing { letter-spacing: 0.08rem; }
+
+.footer-link {
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+.footer-link:hover { color: #fff; }
+
+.social-btn {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.social-btn:hover { background: #fff; color: #212529 !important; }
+
+/* Floating buttons */
+.floating-btns {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  display: flex; flex-direction: column;
+  gap: 10px; z-index: 999;
+}
+
+.float-btn {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; text-decoration: none;
+  border: none; cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: all 0.2s;
+}
+.float-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
+
+.float-call { background: #28a745; color: #fff; }
+.float-chat { background: #0068ff; color: #fff; }
+.float-top  { background: #212529; color: #fff; }

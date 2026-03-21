@@ -1,0 +1,99 @@
+<!-- Footer -->
+<footer class="bg-dark text-white pt-5 pb-4 mt-5">
+  <div class="container">
+    <div class="row g-4">
+
+      <!-- Logo + mô tả -->
+      <div class="col-lg-4 col-md-6">
+        <a class="text-white text-decoration-none d-flex flex-column mb-3" routerLink="/">
+          <span class="fw-bold text-uppercase" style="font-size:20px; letter-spacing:.12rem">FRShop</span>
+          <span class="text-white-50" style="font-size:11px; letter-spacing:.15rem">PREMIUM FOOTWEAR</span>
+        </a>
+        <p class="text-white-50 small">
+          Chuyên phân phối giày chính hãng từ các thương hiệu hàng đầu thế giới.
+          Cam kết chất lượng — Giao hàng nhanh — Đổi trả dễ dàng.
+        </p>
+        <div class="d-flex gap-2 mt-3">
+          <a href="#" class="btn btn-outline-light btn-sm rounded-0 social-btn">
+            <i class="bi bi-facebook"></i>
+          </a>
+          <a href="#" class="btn btn-outline-light btn-sm rounded-0 social-btn">
+            <i class="bi bi-instagram"></i>
+          </a>
+          <a href="#" class="btn btn-outline-light btn-sm rounded-0 social-btn">
+            <i class="bi bi-tiktok"></i>
+          </a>
+          <a href="#" class="btn btn-outline-light btn-sm rounded-0 social-btn">
+            <i class="bi bi-youtube"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="col-lg-2 col-md-6 col-6">
+        <h6 class="text-uppercase fw-bold letter-spacing mb-3">Trang</h6>
+        <ul class="list-unstyled d-flex flex-column gap-2">
+          <li><a routerLink="/"        class="footer-link">Trang Chủ</a></li>
+          <li><a routerLink="/products" class="footer-link">Sản Phẩm</a></li>
+          <li><a routerLink="/about"    class="footer-link">Giới Thiệu</a></li>
+          <li><a routerLink="/contact"  class="footer-link">Liên Hệ</a></li>
+        </ul>
+      </div>
+
+      <!-- Chính sách -->
+      <div class="col-lg-2 col-md-6 col-6">
+        <h6 class="text-uppercase fw-bold letter-spacing mb-3">Chính Sách</h6>
+        <ul class="list-unstyled d-flex flex-column gap-2">
+          <li><a href="#" class="footer-link">Đổi trả hàng</a></li>
+          <li><a href="#" class="footer-link">Bảo hành</a></li>
+          <li><a href="#" class="footer-link">Vận chuyển</a></li>
+          <li><a href="#" class="footer-link">Bảo mật</a></li>
+        </ul>
+      </div>
+
+      <!-- Liên hệ -->
+      <div class="col-lg-4 col-md-6">
+        <h6 class="text-uppercase fw-bold letter-spacing mb-3">Liên Hệ</h6>
+        <ul class="list-unstyled d-flex flex-column gap-3">
+          <li class="d-flex align-items-start gap-2 text-white-50 small">
+            <i class="bi bi-geo-alt-fill mt-1"></i>
+            <span>123 Nguyễn Văn Cừ, Ninh Kiều, Cần Thơ</span>
+          </li>
+          <li class="d-flex align-items-center gap-2 text-white-50 small">
+            <i class="bi bi-telephone-fill"></i>
+            <span>0901 234 567</span>
+          </li>
+          <li class="d-flex align-items-center gap-2 text-white-50 small">
+            <i class="bi bi-envelope-fill"></i>
+            <span>support&#64;rfshop.vn</span>
+          </li>
+          <li class="d-flex align-items-center gap-2 text-white-50 small">
+            <i class="bi bi-clock-fill"></i>
+            <span>T2–T7: 8:00–21:00 | CN: 9:00–18:00</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <hr class="border-secondary mt-4 mb-3"/>
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+      <p class="text-white-50 small mb-0">© 2026 RFShop. All rights reserved.</p>
+      <p class="text-white-50 small mb-0">Thiết kế bởi nhóm sinh viên</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Floating buttons -->
+<div class="floating-btns">
+  <a href="tel:0901234567" class="float-btn float-call" title="Gọi ngay">
+    <i class="bi bi-telephone-fill"></i>
+  </a>
+  <a routerLink="/contact" class="float-btn float-chat" title="Liên hệ">
+    <i class="bi bi-chat-dots-fill"></i>
+  </a>
+  <button class="float-btn float-top" title="Lên đầu trang" (click)="scrollTop()">
+    <i class="bi bi-chevron-up"></i>
+  </button>
+</div>

@@ -1,0 +1,35 @@
+.contact-hero {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eee;
+}
+
+.info-icon-box {
+  font-size: 24px;
+  width: 48px;
+  height: 48px;
+  background: #f8f9fa;
+  border: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #212529;
+  box-shadow: none;
+}
+
+.btn-dark:hover {
+  background: #333;
+}

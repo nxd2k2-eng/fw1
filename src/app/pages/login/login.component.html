@@ -1,0 +1,124 @@
+<div class="login-page">
+
+  <!-- Left panel -->
+  <div class="login-left d-none d-lg-flex">
+    <div class="login-left-content">
+
+      <a class="brand" routerLink="/">
+        <span class="brand-main">RFShop</span>
+        <span class="brand-sub">Premium Footwear</span>
+      </a>
+
+      <div class="left-body">
+        <h2>Chào mừng trở lại!</h2>
+        <p>Đăng nhập để quản lý cửa hàng giày của bạn một cách dễ dàng và hiệu quả.</p>
+
+        <div class="left-features">
+          @for (f of [
+            {icon:'bi-shoe-prints', text:'Quản lý hàng trăm mẫu giày'},
+            {icon:'bi-box-seam', text:'Theo dõi đơn hàng realtime'},
+            {icon:'bi-bar-chart', text:'Báo cáo doanh thu chi tiết'}
+          ]; track $index) {
+            <div class="left-feature">
+              <i class="bi {{ f.icon }} left-feature-icon"></i>
+              <span>{{ f.text }}</span>
+            </div>
+          }
+        </div>
+
+      </div>
+
+      <div class="left-footer">© 2026 RFShop. All rights reserved.</div>
+    </div>
+  </div>
+
+  <!-- Right panel -->
+  <div class="login-right">
+    <div class="login-form-wrap">
+
+      <!-- Logo mobile -->
+      <div class="mobile-logo d-lg-none">
+        <span class="brand-main">ShoeShop</span>
+      </div>
+
+      <h1 class="form-title">Đăng Nhập</h1>
+      <p class="form-subtitle">Nhập thông tin tài khoản của bạn</p>
+
+      <!-- Error -->
+      @if (errorMsg) {
+        <div class="alert-error">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          {{ errorMsg }}
+        </div>
+      }
+
+      <!-- Email -->
+      <div class="field-group">
+        <label>Email</label>
+        <div class="input-wrap">
+          <i class="bi bi-envelope input-icon"></i>
+          <input type="email"
+                 [(ngModel)]="email"
+                 placeholder="email@shoeshop.vn"
+                 (keyup.enter)="login()"
+                 [class.input-error]="errorMsg"/>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="field-group">
+        <label>Mật khẩu</label>
+        <div class="input-wrap">
+          <i class="bi bi-lock input-icon"></i>
+
+          <input [type]="showPass ? 'text' : 'password'"
+                 [(ngModel)]="password"
+                 placeholder="••••••••"
+                 (keyup.enter)="login()"
+                 [class.input-error]="errorMsg"/>
+
+          <button class="eye-btn" type="button" (click)="showPass = !showPass">
+            <i class="bi"
+               [ngClass]="showPass ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <button class="btn-submit"
+              [disabled]="loading"
+              (click)="login()">
+
+        @if (!loading) {
+          <span>
+            <i class="bi bi-box-arrow-in-right me-2"></i>
+            Đăng Nhập
+          </span>
+        } @else {
+          <span>
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Đang xử lý...
+          </span>
+        }
+
+      </button>
+
+      <!-- Demo -->
+      <div class="demo-box">
+        <p class="demo-title">Tài khoản demo</p>
+
+        <div class="demo-row">
+          <span class="demo-label">Team Leader</span>
+          <span class="demo-value">leader&#64;shoeshop.vn / 123456</span>
+        </div>
+
+        <div class="demo-row">
+          <span class="demo-label">Employee</span>
+          <span class="demo-value">nhanvien1&#64;shoeshop.vn / 123456</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

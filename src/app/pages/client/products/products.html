@@ -1,0 +1,215 @@
+<!-- Toolbar -->
+<div class="container-fluid px-4 py-3 border-bottom bg-white">
+  <div class="d-flex align-items-center justify-content-between">
+    <h1 class="h4 fw-bold mb-0">
+      Sản Phẩm
+      @if (!loading) {
+        <span class="text-muted fs-6 fw-normal ms-2">({{ pagination.total }} sản phẩm)</span>
+      }
+    </h1>
+    <div class="d-flex gap-2">
+      <button class="btn btn-sm rounded-0"
+              [class.btn-dark]="viewMode==='grid'"
+              [class.btn-outline-dark]="viewMode!='grid'"
+              (click)="viewMode='grid'">
+        <i class="bi bi-grid"></i>
+      </button>
+      <button class="btn btn-sm rounded-0"
+              [class.btn-dark]="viewMode==='list'"
+              [class.btn-outline-dark]="viewMode!='list'"
+              (click)="viewMode='list'">
+        <i class="bi bi-list-ul"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex" style="min-height: calc(100vh - 130px)">
+
+  <!-- Sidebar -->
+  <aside class="sidebar bg-white border-end p-4">
+
+    <!-- Search -->
+    <div class="mb-4">
+      <p class="text-uppercase small fw-bold text-muted letter-spacing mb-2">Tìm Kiếm</p>
+      <div class="input-group rounded-0">
+        <input type="text" class="form-control rounded-0 border-end-0"
+               [(ngModel)]="filters.search"
+               (keyup.enter)="onSearch()"
+               placeholder="Tên sản phẩm..."/>
+        <button class="btn btn-dark rounded-0" (click)="onSearch()">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="mb-4">
+      <p class="text-uppercase small fw-bold text-muted letter-spacing mb-2">Danh Mục</p>
+      <div class="d-flex flex-column gap-1">
+        <label class="filter-item" [class.active]="!filters.category_id">
+          <input type="radio" name="cat" value=""
+                 [(ngModel)]="filters.category_id"
+                 (change)="onFilterChange()"/>
+          Tất cả
+        </label>
+        @for (c of categories; track c.id) {
+          <label class="filter-item" [class.active]="filters.category_id==c.id.toString()">
+            <input type="radio" name="cat" [value]="c.id"
+                   [(ngModel)]="filters.category_id"
+                   (change)="onFilterChange()"/>
+            {{ c.name }}
+          </label>
+        }
+      </div>
+    </div>
+
+    <!-- Brands -->
+    <div class="mb-4">
+      <p class="text-uppercase small fw-bold text-muted letter-spacing mb-2">Thương Hiệu</p>
+      <div class="d-flex flex-column gap-1">
+        <label class="filter-item" [class.active]="!filters.brand_id">
+          <input type="radio" name="brand" value=""
+                 [(ngModel)]="filters.brand_id"
+                 (change)="onFilterChange()"/>
+          Tất cả
+        </label>
+        @for (b of brands; track b.id) {
+          <label class="filter-item" [class.active]="filters.brand_id==b.id.toString()">
+            <input type="radio" name="brand" [value]="b.id"
+                   [(ngModel)]="filters.brand_id"
+                   (change)="onFilterChange()"/>
+            {{ b.name }}
+          </label>
+        }
+      </div>
+    </div>
+
+    <button class="btn btn-outline-dark rounded-0 w-100 btn-sm" (click)="clearFilters()">
+      ✕ Xoá bộ lọc
+    </button>
+  </aside>
+
+  <!-- Product area -->
+  <main class="flex-1 p-4" style="flex:1">
+
+    <!-- Loading skeleton -->
+    @if (loading) {
+      <div class="products-grid">
+        @for (i of [1,2,3,4,5,6]; track i) {
+          <div class="skeleton-card"></div>
+        }
+      </div>
+    }
+
+    <!-- Empty -->
+    @if (!loading && products.length === 0) {
+      <div class="text-center py-5">
+        <div style="font-size:64px"></div>
+        <p class="text-muted mt-3">Không tìm thấy sản phẩm nào</p>
+        <button class="btn btn-outline-dark rounded-0 mt-2" (click)="clearFilters()">
+          Xoá bộ lọc
+        </button>
+      </div>
+    }
+
+    <!-- Grid view -->
+    @if (!loading && products.length > 0 && viewMode === 'grid') {
+      <div class="products-grid">
+        @for (p of products; track p.id) {
+          <div class="product-card" (click)="viewDetail(p.id)">
+            <div class="card-img-wrap">
+              <img [src]="p.thumbnail_url || 'https://placehold.co/300x220?text=No+Image'"
+                   [alt]="p.name"
+                   (error)="$any($event.target).src='https://placehold.co/300x220?text=No+Image'"/>
+              @if (hasDiscount(p)) {
+                <span class="badge-sale">-{{ discountPct(p) }}%</span>
+              }
+              @if (p.total_stock === 0) {
+                <span class="badge-out">Hết hàng</span>
+              }
+              <div class="card-hover-btns">
+                <button class="btn btn-light btn-sm rounded-0"
+                        (click)="$event.stopPropagation(); viewDetail(p.id)">
+                  <i class="bi bi-eye"></i>
+                </button>
+                <button class="btn btn-dark btn-sm rounded-0"
+                        (click)="$event.stopPropagation(); goOrder(p.id)"
+                        [disabled]="p.total_stock === 0">
+                  <i class="bi bi-cart-plus"></i> Đặt hàng
+                </button>
+              </div>
+            </div>
+            <div class="p-3">
+              <p class="card-brand-tag mb-1">{{ p.brand }}</p>
+              <h3 class="card-title">{{ p.name }}</h3>
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="price-main">{{ getDisplayPrice(p) | number:'1.0-0' }}₫</span>
+                @if (hasDiscount(p)) {
+                  <span class="price-old">{{ p.price | number:'1.0-0' }}₫</span>
+                }
+              </div>
+              <p class="stock-text mb-0" [class.low]="p.total_stock > 0 && p.total_stock <= 5">
+                @if (p.total_stock > 0) { Còn {{ p.total_stock }} đôi }
+                @else { Hết hàng }
+              </p>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- List view -->
+    @if (!loading && products.length > 0 && viewMode === 'list') {
+      <div class="d-flex flex-column gap-2">
+        @for (p of products; track p.id) {
+          <div class="list-item d-flex align-items-center gap-3 p-3 bg-white border"
+               (click)="viewDetail(p.id)">
+            <img [src]="p.thumbnail_url || 'https://placehold.co/72x72?text=G'"
+                 [alt]="p.name" class="list-img"
+                 (error)="$any($event.target).src='https://placehold.co/72x72?text=G'"/>
+            <div class="flex-1" style="flex:1">
+              <p class="card-brand-tag mb-0">{{ p.brand }} · {{ p.category }}</p>
+              <h3 class="list-title mb-0">{{ p.name }}</h3>
+            </div>
+            <div class="text-end" style="min-width:120px">
+              <div class="price-main">{{ getDisplayPrice(p) | number:'1.0-0' }}₫</div>
+              @if (hasDiscount(p)) {
+                <div class="price-old">{{ p.price | number:'1.0-0' }}₫</div>
+              }
+            </div>
+            <div class="text-muted small" style="min-width:70px; text-align:center">
+              {{ p.total_stock }} đôi
+            </div>
+            <div class="d-flex gap-2" (click)="$event.stopPropagation()">
+              <button class="btn btn-outline-dark btn-sm rounded-0"
+                      (click)="viewDetail(p.id)">Chi tiết</button>
+              <button class="btn btn-dark btn-sm rounded-0"
+                      (click)="goOrder(p.id)"
+                      [disabled]="p.total_stock === 0">Đặt hàng</button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Pagination -->
+    @if (pagination.pages > 1) {
+      <div class="d-flex justify-content-center gap-2 mt-4">
+        <button class="btn btn-outline-dark btn-sm rounded-0"
+                (click)="goToPage(filters.page - 1)"
+                [disabled]="filters.page === 1">‹</button>
+        @for (p of getPages(); track p) {
+          <button class="btn btn-sm rounded-0"
+                  [class.btn-dark]="p === filters.page"
+                  [class.btn-outline-dark]="p !== filters.page"
+                  (click)="goToPage(p)">{{ p }}</button>
+        }
+        <button class="btn btn-outline-dark btn-sm rounded-0"
+                (click)="goToPage(filters.page + 1)"
+                [disabled]="filters.page === pagination.pages">›</button>
+      </div>
+    }
+
+  </main>
+</div>
