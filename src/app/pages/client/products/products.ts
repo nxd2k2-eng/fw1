@@ -25,7 +25,7 @@ export class Products implements OnInit {
   constructor(
     private productSvc: ProductService,
     private router: Router,
-    private cdr: ChangeDetectorRef   // ← thêm
+    private cdr: ChangeDetectorRef  
   ) {}
 
   ngOnInit() {
@@ -45,11 +45,11 @@ export class Products implements OnInit {
         this.products   = res.data.items;
         this.pagination = res.data.pagination;
         this.loading    = false;
-        this.cdr.detectChanges();   // ← force update UI
+        this.cdr.detectChanges();  
       },
       error: () => {
         this.loading = false;
-        this.cdr.detectChanges();   // ← force update UI
+        this.cdr.detectChanges();  
       }
     });
   }
@@ -57,14 +57,14 @@ export class Products implements OnInit {
   loadCategories() {
     this.productSvc.getCategories().subscribe(res => {
       this.categories = res.data;
-      this.cdr.detectChanges();   // ← force update UI
+      this.cdr.detectChanges();  
     });
   }
 
   loadBrands() {
     this.productSvc.getBrands().subscribe(res => {
       this.brands = res.data;
-      this.cdr.detectChanges();   // ← force update UI
+      this.cdr.detectChanges();   
     });
   }
 

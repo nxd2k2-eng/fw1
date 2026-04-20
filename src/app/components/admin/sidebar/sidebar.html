@@ -1,1 +1,18 @@
-<p>sidebar works!</p>
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span class="logo-icon">👟</span>
+    <span class="logo-text">ShoeShop</span>
+  </div>
+  <nav class="sidebar-nav">
+    <a
+      *ngFor="let item of menuItems"
+      [routerLink]="item.path"
+      [routerLinkActiveOptions]="{ exact: item.exact }"
+      routerLinkActive="active"
+      class="nav-item"
+    >
+      <span class="nav-icon">{{ item.icon }}</span>
+      <span class="nav-label">{{ item.label }}</span>
+    </a>
+  </nav>
+</aside>

@@ -1,1 +1,22 @@
-<p>admin-header works!</p>
+<header class="admin-header">
+  <div class="header-left">
+    <h2 class="page-title">Quản trị hệ thống</h2>
+  </div>
+
+  <div class="header-right" *ngIf="user">
+    <div class="user-info">
+      <span class="user-avatar">
+        {{ user.name.charAt(0).toUpperCase() }}
+      </span>
+
+      <div class="user-detail">
+        <span class="user-name">{{ user.name }}</span>
+        <span class="user-role">
+          {{ user.role === 'team_leader' ? 'Quản lý' : 'Nhân viên' }}
+        </span>
+      </div>
+    </div>
+
+    <button class="btn-logout" (click)="logout()">🚪 Đăng xuất</button>
+  </div>
+</header>

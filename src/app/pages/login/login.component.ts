@@ -23,7 +23,10 @@ export class LoginComponent {
   errorMsg = '';
 
   login() {
-    if (!this.email || !this.password) {
+    const email = this.email.trim();
+    const password = this.password.trim();
+
+    if (!email || !password) {
       this.errorMsg = 'Vui lòng nhập đầy đủ thông tin';
       return;
     }
@@ -31,18 +34,24 @@ export class LoginComponent {
     this.loading = true;
     this.errorMsg = '';
 
-    this.auth.login(this.email, this.password).subscribe({
+    this.auth.login(email, password).subscribe({
       next: (res) => {
         this.loading = false;
+
+        if (!res.success) {
+          this.errorMsg = res.message || 'Sai email hoặc mật khẩu';
+          return;
+        }
 
         const role = res?.data?.user?.role;
 
         this.router.navigate([
-          role === 'team_leader' ? '/admin' : '/home'
+          role === 'team_leader' ? '/admin' : '/'
         ]);
       },
       error: (err) => {
         this.loading = false;
+        console.error('Login error', err);
         this.errorMsg =
           err?.error?.message || 'Sai email hoặc mật khẩu';
       }
